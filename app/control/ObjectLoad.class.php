@@ -1,4 +1,8 @@
 <?php
+
+use Adianti\Control\TPage;
+use Adianti\Database\TTransaction;
+
 class ObjectLoad extends TPage
 {
      public function __construct()
