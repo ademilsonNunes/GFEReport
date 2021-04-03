@@ -10,6 +10,8 @@
  * @license   
  */
 use Adianti\Database\TRecord;
+use Adianti\Database\TTransaction;
+use Adianti\Widget\Dialog\TMessage;
 
 class CalculoFrete extends TRecord
 {
@@ -77,5 +79,61 @@ class CalculoFrete extends TRecord
          parent::addAttribute('GWF_SERDF');
          parent::addAttribute('GWF_NRDF');
          parent::addAttribute('GWF_DTEMDF');
+    }
+
+
+    /**
+     * getFaturas
+     * @param mixed $dataInicial 
+     * @param mixed $dataFinal 
+     * @return PDOStatement|false|void 
+     */
+    public static function getFaturas($dataInicial, $dataFinal)
+    {
+        /* Faturas de Frete */
+        try
+       {
+          TTransaction::open('protheus'); // abre uma transação
+           $conn = TTransaction::get(); // obtém a conexão
+            
+            $query = "SELECT GWF_NRDF
+            FROM GWF010
+            WHERE GWF_NRROM IN (
+                                    SELECT DISTINCT NRROM + '01'
+                                    FROM(
+                                    SELECT F2_ROMANEI AS NRROM
+                                    FROM SF2010 
+                                    WHERE F2_EMISSAO BETWEEN '{$dataInicial}' AND '{$dataFinal}'
+                                    AND D_E_L_E_T_ = ''
+                                    
+                                    UNION ALL
+                                    
+                                    SELECT F2_ROMANEI AS NRROM
+                                    FROM SF2010 
+                                    WHERE F2_EMISSAO BETWEEN '{$dataInicial}' AND '{$dataFinal}'
+                                    
+                                    AND D_E_L_E_T_ = ''
+                                    UNION ALL
+                                    
+                                    SELECT F2_ROMANEI AS NRROM
+                                    FROM SF2010 
+                                    WHERE F2_EMISSAO BETWEEN '{$dataInicial}' AND '{$dataFinal}'
+                                    AND D_E_L_E_T_ = ''
+                                    ) AS RES
+                                    WHERE NRROM <> ''
+                                )
+            AND D_E_L_E_T_ = ''
+            AND GWF_NRDF <> ''";
+            // realiza a consulta
+            $result = $conn->query($query);
+            return $result;
+
+          TTransaction::close(); // fecha a transação.
+       }
+       catch (Exception $e)
+       {
+          new TMessage('error', $e->getMessage());
+       }
+       
     }
 }    

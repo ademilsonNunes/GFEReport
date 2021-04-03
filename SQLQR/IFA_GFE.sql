@@ -87,9 +87,9 @@ SELECT NRROM,
 		WHEN  '2' THEN 'COMPLEMENTO VALOR'
 		WHEN  '3' THEN 'COMPLEMENTO IMPOSTO'
 		WHEN  '4' THEN 'REINTREGA'
-		WHEN  '5' THEN 'DEVOLUÇÃO'
+		WHEN  '5' THEN 'DEVOLUÃ‡ÃƒO'
 		WHEN  '6' THEN 'REDESPACHO'
-		WHEN  '7' THEN 'SERVIÇO'
+		WHEN  '7' THEN 'SERVIÃ‡O'
 	   END AS TPDF,
        VLCALCFRET,
 	   NRDF,
@@ -174,7 +174,36 @@ LEFT JOIN GW1010 GW1   ON GW1.GW1_NRROM    = GWF.GWF_NRROM
 LEFT JOIN GWN010 GWN   ON GWN.GWN_NRROM    = GWF.GWF_NRROM
 WHERE GWI_NRCALC IN (SELECT GWF_NRCALC
                      FROM GWF010 
-                     WHERE GWF_NRROM IN ('20358401')
+                     WHERE GWF_NRDF IN (
+					                     SELECT GWF_NRDF
+                                         FROM GWF010
+										 WHERE GWF_NRROM IN (
+										  						SELECT DISTINCT NRROM + '01'
+										  						FROM(
+										  						SELECT F2_ROMANEI AS NRROM
+										  						FROM SF2010 
+										  						WHERE F2_EMISSAO BETWEEN '20210201' AND'20210201'
+										  						AND D_E_L_E_T_ = ''
+										  						
+										  						UNION ALL
+										  						
+										  						SELECT F2_ROMANEI AS NRROM
+										  						FROM SF2010 
+										  						WHERE F2_EMISSAO BETWEEN '20210201' AND'20210201'
+										  						
+										  						AND D_E_L_E_T_ = ''
+										  						UNION ALL
+										  						
+										  						SELECT F2_ROMANEI AS NRROM
+										  						FROM SF2010 
+										  						WHERE F2_EMISSAO BETWEEN '20210201' AND'20210201'
+										  						AND D_E_L_E_T_ = ''
+										  						) AS RES
+										  						WHERE NRROM <> ''
+										                      )
+										  AND D_E_L_E_T_ = ''
+										  AND GWF_NRDF <> ''
+					                    )
                      AND D_E_L_E_T_ = '') 
 AND GWI.GWI_VLFRET <> 0					 
 AND GWI.D_E_L_E_T_ = ''
@@ -189,6 +218,45 @@ ORDER BY NRROM,
 
 
 
+
+
+/*
+SELECT GWF_NRDF
+FROM GWF010
+WHERE GWF_NRROM IN (
+						SELECT DISTINCT NRROM + '01'
+						FROM(
+						SELECT F2_ROMANEI AS NRROM
+						FROM SF2010 
+						WHERE F2_EMISSAO BETWEEN '20210201' AND'20210201'
+						AND D_E_L_E_T_ = ''
+						
+						UNION ALL
+						
+						SELECT F2_ROMANEI AS NRROM
+						FROM SF2010 
+						WHERE F2_EMISSAO BETWEEN '20210201' AND'20210201'
+						
+						AND D_E_L_E_T_ = ''
+						UNION ALL
+						
+						SELECT F2_ROMANEI AS NRROM
+						FROM SF2010 
+						WHERE F2_EMISSAO BETWEEN '20210201' AND'20210201'
+						AND D_E_L_E_T_ = ''
+						) AS RES
+						WHERE NRROM <> ''
+                    )
+AND D_E_L_E_T_ = ''
+AND GWF_NRDF <> ''
+*/
+
+
+
+
+
+
+					/*
 SELECT *
 FROM ZZQ010 
 WHERE ZZQ_ROMANE = '203776'
@@ -260,3 +328,4 @@ AND D_E_L_E_T_  = ''
 
 
 
+*/
