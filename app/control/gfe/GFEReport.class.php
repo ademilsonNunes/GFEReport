@@ -24,54 +24,30 @@ class GFEReport extends TPage
     public function __construct()
     {
         parent::__construct();
-
-        /* Faturas de Frete */
-        $faturas = new CalculoFrete();
-        $result  = $faturas->getFaturas('20210201','20210201');
-
-        foreach ($result as $row) // exibe os resultados
+     
+         
+        $nfSaida = new NFSaidaSobel();
+        $notas   = $nfSaida->getNotasByEmissao('20210105', '20210105');
+        
+        foreach($notas as $nota)
         {
-           print $row['GWF_NRDF'] . "<br>\n";
-
-
-
-           /* Docts */
-           try 
-           {
-                TTransaction::open('protheus');
-                $criteria = new TCriteria();
-                $criteria->add(new TFilter('D_E_L_E_T_', '=', ''), TExpression::AND_OPERATOR);
-                $criteria->add(new TFilter('GW4_NRDF', '=', $row['GWF_NRDF']), TExpression::AND_OPERATOR);
-
-
-                $repository = new TRepository('NotasDocFreteSobel');
-                $notasFreteJMT = $repository->load($criteria);
-                foreach ($notasFreteJMT as $notaFrete)
-                {
-                    if(trim($notaFrete->GW4_TPDC) <> '')
-                    {
-                        echo $notaFrete->GW4_TPDC . '<br>';
-                    }
-                    else
-                    {   
-                        echo  'VAZIO<br>';          
-                    }
-                    
-                }
-                   TTransaction::close();
-            } 
-            catch (Exception $e) 
+         //    echo $nota['EMP'] . '-' . $nota['NF'] . '-' . $nota['SERIE'] . '-' . $nota['NRROM'] . '</br>';    
+             
+             
+             $docsFrete = new NotasDocFreteSobel();
+             $docs = $docsFrete->getDocsFrete($nota['NF'], $nota['SERIE']);
+            foreach($docs as $doc)
             {
-                new TMessage('error', $e->getMessage());       
-            }
-
-
-
-        }
-          
+                echo $doc['GW4_NRDC'] ;
             
+            }   
+        }         
 
+
+
+     
         /* Romaneio */
+        /*
         try 
         {
             TTransaction::open('protheus');
@@ -91,5 +67,6 @@ class GFEReport extends TPage
         {
             new TMessage('error', $e->getMessage());       
         }
+        */
     }
 }

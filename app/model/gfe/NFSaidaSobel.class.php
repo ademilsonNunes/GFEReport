@@ -10,6 +10,8 @@
  * @license   
  */
 use Adianti\Database\TRecord;
+use Adianti\Database\TTransaction;
+use Adianti\Widget\Dialog\TMessage;
 
 class NFSaidaSobel extends TRecord
 {
@@ -263,4 +265,63 @@ class NFSaidaSobel extends TRecord
         parent::addAttribute('F2_LOJAREM');
 
     }
+    /**
+     * getNotasByEmissao()
+     * @param mixed $dataInicial 
+     * @param mixed $dataFinal 
+     * @return PDOStatement|false|void 
+     */
+    public static function getNotasByEmissao($dataInicial, $dataFinal)
+    {
+        $query = "SELECT DISTINCT EMP, 
+                  NF,
+                  SERIE, 
+                  NRROM
+                  FROM(
+                  SELECT 'EMP' = 'SOBEL',
+                  F2_ROMANEI AS NRROM,
+                  F2_DOC     AS NF,
+                  F2_SERIE   AS SERIE
+                  FROM SF2010 
+                  WHERE F2_EMISSAO BETWEEN '{$dataInicial}' AND '{$dataFinal}'
+                  AND D_E_L_E_T_ = ''
+                  
+                  UNION ALL
+                  
+                  SELECT'EMP' = 'JMT',
+                  F2_ROMANEI AS NRROM,
+                  F2_DOC     AS NF,
+                  F2_SERIE   AS SERIE
+                  FROM SF2020 
+                  WHERE F2_EMISSAO BETWEEN '{$dataInicial}' AND '{$dataFinal}'
+                  
+                  AND D_E_L_E_T_ = ''
+                  UNION ALL
+                  
+                  SELECT'EMP' = '3F',
+                  F2_ROMANEI AS NRROM,
+                  F2_DOC     AS NF,
+                  F2_SERIE   AS SERIE
+                  FROM SF2040 
+                  WHERE F2_EMISSAO BETWEEN '{$dataInicial}' AND '{$dataFinal}'
+                  AND D_E_L_E_T_ = ''
+                  ) AS RES
+                  WHERE NRROM <> ''";
+
+       try
+       {
+          TTransaction::open('protheus'); 
+           $conn = TTransaction::get();         
+           $result = $conn->query($query);
+
+           return $result;
+
+          TTransaction::close(); 
+       }
+       catch (Exception $e)
+       {
+          new TMessage('error', $e->getMessage());
+       }
+    }
+
 }

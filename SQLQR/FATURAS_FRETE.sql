@@ -33,6 +33,7 @@ WHERE D_E_L_E_T_ = ''
 ) AS RES
 
 
+
 /*
 
 SELECT  *

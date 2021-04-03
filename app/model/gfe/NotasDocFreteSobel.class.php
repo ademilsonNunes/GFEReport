@@ -10,6 +10,8 @@
  * @license   
  */
 use Adianti\Database\TRecord;
+use Adianti\Database\TTransaction;
+use Adianti\Widget\Dialog\TMessage;
 
 class NotasDocFreteSobel extends TRecord
 {
@@ -35,4 +37,95 @@ class NotasDocFreteSobel extends TRecord
         parent::addAttribute('R_E_C_N_O_');
         parent::addAttribute('R_E_C_D_E_L_');
     }
+    /**
+     * getDocsFrete()
+     * @param mixed $nota 
+     * @return PDOStatement|false|void 
+     */
+   public static function getDocsFrete($nota, $serie)
+   {
+       $query = "SELECT EMP,
+       GW4_EMISDF,
+	   GW4_CDESP,
+	   GW4_SERDF,
+	   GW4_NRDF,
+	   GW4_DTEMIS,
+	   GW4_NRDC,
+	   GW4_TPDC,
+	   GW4_SERDC,
+	   GW4_EMISDC,
+	   GW4_SDOCDC
+       FROM(
+       SELECT EMP = 'SOBEL',
+              GW4_EMISDF,
+       	   GW4_CDESP,
+       	   GW4_SERDF,
+       	   GW4_NRDF,
+       	   GW4_DTEMIS,
+       	   GW4_NRDC,
+       	   GW4_TPDC,
+       	   GW4_SERDC,
+       	   GW4_EMISDC,
+       	   GW4_SDOCDC,
+       	   R_E_C_N_O_
+       FROM GW4010 
+       WHERE GW4_NRDC = '{$nota}' 
+       AND GW4_SERDC = '{$serie}' 
+       AND D_E_L_E_T_  = ''
+       
+       UNION ALL
+       
+       SELECT EMP = 'JMT', 
+              GW4_EMISDF,
+       	   GW4_CDESP,
+       	   GW4_SERDF,
+       	   GW4_NRDF,
+       	   GW4_DTEMIS,
+       	   GW4_NRDC,
+       	   GW4_TPDC,
+       	   GW4_SERDC,
+       	   GW4_EMISDC,
+       	   GW4_SDOCDC,
+       	   R_E_C_N_O_
+       FROM GW4020
+       WHERE GW4_NRDC = '{$nota}'  
+       AND GW4_SERDC = '{$serie}'  
+       AND D_E_L_E_T_  = ''
+       
+       UNION ALL
+       
+       SELECT EMP = '3F', 
+              GW4_EMISDF,
+       	   GW4_CDESP,
+       	   GW4_SERDF,
+       	   GW4_NRDF,
+       	   GW4_DTEMIS,
+       	   GW4_NRDC,
+       	   GW4_TPDC,
+       	   GW4_SERDC,
+       	   GW4_EMISDC,
+       	   GW4_SDOCDC,
+       	   R_E_C_N_O_
+       FROM GW4040
+       WHERE GW4_NRDC = '{$nota}' 
+       AND GW4_SERDC = '{$serie}' 
+       AND D_E_L_E_T_  = ''
+       )AS RES
+       ";
+ 
+       try
+       {
+           TTransaction::open('protheus'); 
+           $conn = TTransaction::get();         
+           $result = $conn->query($query);
+       
+           return $result;
+       
+          TTransaction::close(); 
+       }
+       catch (Exception $e)
+       {
+          new TMessage('error', $e->getMessage());
+       }
+   }          
 }
