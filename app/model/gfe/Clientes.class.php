@@ -1,4 +1,16 @@
 <?php
+/**
+ * Clientes
+ *
+ * @version    1.0
+ * @package    model
+ * @subpackage gfe
+ * @author     Ademilson Nunes
+ * @copyright 
+ * @license   
+ */
+use Adianti\Database\TRecord;
+
 class Clientes extends TRecord
 {
     const TABLENAME = 'SA1010';
