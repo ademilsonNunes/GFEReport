@@ -63,7 +63,9 @@ class TabularReport extends TPage
     {
         $data = $this->form->getData();
 
-        new TMessage('info',  $data->dataInicial );
+        $dataInicial =  str_replace('-','',$data->dataInicial);
+
+        new TMessage('info',  $dataInicial );
         /*
         try
         {

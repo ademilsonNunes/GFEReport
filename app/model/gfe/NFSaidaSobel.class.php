@@ -322,6 +322,9 @@ class NFSaidaSobel extends TRecord
        {
           new TMessage('error', $e->getMessage());
        }
+
+
+       return $result;
     }
 
 }
