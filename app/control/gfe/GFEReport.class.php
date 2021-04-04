@@ -27,18 +27,15 @@ class GFEReport extends TPage
      
          
         $nfSaida = new NFSaidaSobel();
-        $notas   = $nfSaida->getNotasByEmissao('20210105', '20210105');
+        $notas   = $nfSaida->getNotasByEmissao('20210205', '20210205');
         
         foreach($notas as $nota)
         {
-         //    echo $nota['EMP'] . '-' . $nota['NF'] . '-' . $nota['SERIE'] . '-' . $nota['NRROM'] . '</br>';    
-             
-             
              $docsFrete = new NotasDocFreteSobel();
              $docs = $docsFrete->getDocsFrete($nota['NF'], $nota['SERIE']);
             foreach($docs as $doc)
             {
-                echo $doc['GW4_NRDC'] ;
+                echo $doc['EMP'] . '-' . $nota['EMP'] . '-' . $nota['NF'] . '-' . $doc['GW4_EMISDF'] . '-' . $doc['GW4_CDESP'] . '-' . $doc['GW4_SERDF'] . '-' . $doc['GW4_NRDF'] . '-' . $doc['GW4_DTEMIS'] . '-' . $doc['GW4_NRDC'] . '-' . $doc['GW4_TPDC'] . '-' . $doc['GW4_NRDC'] . '-' . $doc['GW4_EMISDC']. '-' . $doc['GW4_SDOCDC'] . '<br>';
             
             }   
         }         

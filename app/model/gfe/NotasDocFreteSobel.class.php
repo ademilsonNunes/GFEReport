@@ -96,16 +96,16 @@ class NotasDocFreteSobel extends TRecord
        
        SELECT EMP = '3F', 
               GW4_EMISDF,
-       	   GW4_CDESP,
-       	   GW4_SERDF,
-       	   GW4_NRDF,
-       	   GW4_DTEMIS,
-       	   GW4_NRDC,
-       	   GW4_TPDC,
-       	   GW4_SERDC,
-       	   GW4_EMISDC,
-       	   GW4_SDOCDC,
-       	   R_E_C_N_O_
+       	      GW4_CDESP,
+       	      GW4_SERDF,
+       	      GW4_NRDF,
+       	      GW4_DTEMIS,
+       	      GW4_NRDC,
+       	      GW4_TPDC,
+       	      GW4_SERDC,
+       	      GW4_EMISDC,
+       	      GW4_SDOCDC,
+       	      R_E_C_N_O_
        FROM GW4040
        WHERE GW4_NRDC = '{$nota}' 
        AND GW4_SERDC = '{$serie}' 
@@ -116,12 +116,13 @@ class NotasDocFreteSobel extends TRecord
        try
        {
            TTransaction::open('protheus'); 
-           $conn = TTransaction::get();         
-           $result = $conn->query($query);
-       
-           return $result;
-       
-          TTransaction::close(); 
+            $conn = TTransaction::get();         
+            $result = $conn->query($query);
+
+           return $result; 
+           
+           TTransaction::close();
+
        }
        catch (Exception $e)
        {
