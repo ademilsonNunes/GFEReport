@@ -118,8 +118,6 @@ class NotasDocFreteSobel extends TRecord
            TTransaction::open('protheus'); 
             $conn = TTransaction::get();         
             $result = $conn->query($query);
-
-           return $result; 
            
            TTransaction::close();
 
@@ -128,5 +126,7 @@ class NotasDocFreteSobel extends TRecord
        {
           new TMessage('error', $e->getMessage());
        }
+
+       return $result; 
    }          
 }

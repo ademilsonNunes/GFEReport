@@ -28,7 +28,7 @@ class GFEReport extends TPage
      
          
         $nfSaida = new NFSaidaSobel();
-        $notas   = $nfSaida->getNotasByEmissao('20210201', '20210205');
+        $notas   = $nfSaida->getNotasByEmissao('20210201', '20210228');
         $i = 1;        
         foreach($notas as $nota)
         {
@@ -36,7 +36,7 @@ class GFEReport extends TPage
             $res[$i]['SERIE'] = $nota['SERIE'];
             try
             {
-               TTransaction::open('protheus'); // abre uma transação
+               TTransaction::open('protheus'); // abre uma transação            
                 $conn = TTransaction::get(); // obtém a conexão
              
                  // realiza a consulta
@@ -62,6 +62,7 @@ class GFEReport extends TPage
             $i++;   
         }
 
+              echo date('d-m-Y h:i:s');
               d($res);  
         
         
