@@ -134,12 +134,6 @@ WHERE GW4_NRDC IN        ( SELECT F2_DOC
 AND GW4.D_E_L_E_T_  = ''
 ) AS RES
 
-
-SELECT *
-FROM GWH010 
-
-
-
 /*
 
 SELECT *
