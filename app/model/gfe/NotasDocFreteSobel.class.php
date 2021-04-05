@@ -44,82 +44,29 @@ class NotasDocFreteSobel extends TRecord
      */
    public static function getDocsFrete($nota, $serie)
    {
-       $query = "SELECT EMP,
-       GW4_EMISDF,
-	   GW4_CDESP,
-	   GW4_SERDF,
-	   GW4_NRDF,
-	   GW4_DTEMIS,
-	   GW4_NRDC,
-	   GW4_TPDC,
-	   GW4_SERDC,
-	   GW4_EMISDC,
-	   GW4_SDOCDC
-       FROM(
-       SELECT EMP = 'SOBEL',
-              GW4_EMISDF,
-       	   GW4_CDESP,
-       	   GW4_SERDF,
-       	   GW4_NRDF,
-       	   GW4_DTEMIS,
-       	   GW4_NRDC,
-       	   GW4_TPDC,
-       	   GW4_SERDC,
-       	   GW4_EMISDC,
-       	   GW4_SDOCDC,
-       	   R_E_C_N_O_
+       $query = "SELECT GW4_EMISDF,
+       	                GW4_CDESP,
+       	                GW4_SERDF,
+       	                GW4_NRDF,
+       	                GW4_DTEMIS,
+       	                GW4_NRDC,
+       	                GW4_TPDC,
+       	                GW4_SERDC,
+       	                GW4_EMISDC,
        FROM GW4010 
        WHERE GW4_NRDC = '{$nota}' 
        AND GW4_SERDC = '{$serie}' 
-       AND D_E_L_E_T_  = ''
-       
-       UNION ALL
-       
-       SELECT EMP = 'JMT', 
-              GW4_EMISDF,
-       	   GW4_CDESP,
-       	   GW4_SERDF,
-       	   GW4_NRDF,
-       	   GW4_DTEMIS,
-       	   GW4_NRDC,
-       	   GW4_TPDC,
-       	   GW4_SERDC,
-       	   GW4_EMISDC,
-       	   GW4_SDOCDC,
-       	   R_E_C_N_O_
-       FROM GW4020
-       WHERE GW4_NRDC = '{$nota}'  
-       AND GW4_SERDC = '{$serie}'  
-       AND D_E_L_E_T_  = ''
-       
-       UNION ALL
-       
-       SELECT EMP = '3F', 
-              GW4_EMISDF,
-       	      GW4_CDESP,
-       	      GW4_SERDF,
-       	      GW4_NRDF,
-       	      GW4_DTEMIS,
-       	      GW4_NRDC,
-       	      GW4_TPDC,
-       	      GW4_SERDC,
-       	      GW4_EMISDC,
-       	      GW4_SDOCDC,
-       	      R_E_C_N_O_
-       FROM GW4040
-       WHERE GW4_NRDC = '{$nota}' 
-       AND GW4_SERDC = '{$serie}' 
-       AND D_E_L_E_T_  = ''
-       )AS RES
-       ";
+       AND D_E_L_E_T_  = '' ";
  
        try
        {
            TTransaction::open('protheus'); 
             $conn = TTransaction::get();         
             $result = $conn->query($query);
-           
-           TTransaction::close();
+
+            return $result; 
+
+            TTransaction::close();
 
        }
        catch (Exception $e)
@@ -127,6 +74,6 @@ class NotasDocFreteSobel extends TRecord
           new TMessage('error', $e->getMessage());
        }
 
-       return $result; 
+
    }          
 }

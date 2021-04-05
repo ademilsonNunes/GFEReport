@@ -40,12 +40,7 @@ class GFEReport extends TPage
                 $conn = TTransaction::get(); // obtém a conexão
              
                  // realiza a consulta
-                 $result = $conn->query("SELECT * FROM GW4010 WHERE GW4_NRDC = '{$res[$i]['NF']}' AND GW4_SERDC = '{$res[$i]['SERIE']}' AND D_E_L_E_T_ = '' 
-                                        UNION ALL 
-                                        SELECT * FROM GW4020 WHERE GW4_NRDC = '{$res[$i]['NF']}' AND GW4_SERDC = '{$res[$i]['SERIE']}' AND D_E_L_E_T_ = ''
-                                        UNION ALL
-                                        SELECT * FROM GW4040 WHERE GW4_NRDC = '{$res[$i]['NF']}' AND GW4_SERDC = '{$res[$i]['SERIE']}' AND D_E_L_E_T_ = ''
-                                       ");
+                 $result = $conn->query("SELECT * FROM GW4010 WHERE GW4_NRDC = '{$res[$i]['NF']}' AND GW4_SERDC = '{$res[$i]['SERIE']}' AND D_E_L_E_T_ = '' ");
              
                  foreach ($result as $row) // exibe os resultados
                  {               
