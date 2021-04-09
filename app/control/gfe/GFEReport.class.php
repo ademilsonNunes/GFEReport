@@ -45,7 +45,9 @@ class GFEReport extends TPage
                  foreach ($result as $row) // exibe os resultados
                  {               
                      
-                    print $row['GW4_EMISDF'] . '-' . $row['GW4_CDESP'] . '-' . $row['GW4_SERDF'] . '-' . $row['GW4_NRDF'] . '-' . $row['GW4_DTEMIS'] . '-' . $row['GW4_NRDC'] . '-' . $row['GW4_TPDC'] . '-' . $row['GW4_NRDC'] . '-' . $row['GW4_EMISDC']. '-' . $row['GW4_SDOCDC'] . '<br>';  
+                    print   $row['GW4_EMISDF'] . '-' . $row['GW4_CDESP'] . '-' . $row['GW4_SERDF'] . '-' . $row['GW4_NRDF'] 
+                    . '-' . $row['GW4_DTEMIS'] . '-' . $row['GW4_NRDC'] . '-' . $row['GW4_TPDC'] . '-' . $row['GW4_NRDC'] 
+                    . '-' . $row['GW4_EMISDC'] . '-' . $row['GW4_SDOCDC'] . '<br>';  
                  }
      
                TTransaction::close(); // fecha a transação.
